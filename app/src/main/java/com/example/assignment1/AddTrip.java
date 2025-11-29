@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.widget.*;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -88,9 +92,20 @@ public class AddTrip extends AppCompatActivity {
             trip.setIncludeLunch(chkLunch.isChecked());
             trip.setFamilyFriendly(swFamily.isChecked());
 
+            String storedImagePath = null;
+
             if (selectedImageUri != null) {
-                trip.setImageUri(selectedImageUri.toString());
+                storedImagePath = saveImageToInternalStorage(selectedImageUri);
             }
+
+
+            if (storedImagePath != null) {
+                trip.setImageUri(storedImagePath);
+            }
+
+//            if (selectedImageUri != null) {
+//                trip.setImageUri(selectedImageUri.toString());
+//            }
 
             ArrayList<Trip> trips = Shared_pref_trip.loadTrips(this);
             if (trips == null) trips = new ArrayList<>();
@@ -106,14 +121,66 @@ public class AddTrip extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+
             selectedImageUri = data.getData();
 
+            // 1) Show preview (optional but fine)
+            imgTripPreview.setImageURI(selectedImageUri);
+
+            // 2) Copy the image into app internal storage
+            String storedImagePath = saveImageToInternalStorage(selectedImageUri);
+
+            if (storedImagePath != null) {
+                Toast.makeText(this, "Image saved to app storage ✅", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Failed to save image ❌", Toast.LENGTH_SHORT).show();
+            }
+
+            // You can now pass `storedImagePath` later when saving the Trip object
+        }
+    }
+
+    private String saveImageToInternalStorage(Uri sourceUri) {
+        InputStream in = null;
+        FileOutputStream out = null;
+        try {
+            in = getContentResolver().openInputStream(sourceUri);
+
+            // 2) أنشئي فولدر داخلي لحفظ الصور: /data/data/your.package.name/files/images
+            File imagesDir = new File(getFilesDir(), "images");
+            if (!imagesDir.exists()) {
+                imagesDir.mkdirs();
+            }
+
+
+            String fileName = "trip_" + System.currentTimeMillis() + ".jpg";
+            File imageFile = new File(imagesDir, fileName);
+
+
+            out = new FileOutputStream(imageFile);
+
+
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            while ((bytesRead = in.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
+            }
+
+            return imageFile.getAbsolutePath();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
             try {
-                imgTripPreview.setImageURI(selectedImageUri);
+                if (in != null) in.close();
+                if (out != null) out.close();
             } catch (Exception e) {
-                Toast.makeText(this, "Error loading image", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
             }
         }
     }
+
 }

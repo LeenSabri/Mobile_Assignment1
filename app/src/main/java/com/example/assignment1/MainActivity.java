@@ -101,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.O
                     filteredList.add(t);
                 }
 
-                // if (t.getCoordinator() != null && t.getCoordinator().toLowerCase().contains(query)) { ... }
             }
         }
 

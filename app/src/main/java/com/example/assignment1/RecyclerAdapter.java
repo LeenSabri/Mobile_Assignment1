@@ -45,21 +45,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             btnDelete = itemView.findViewById(R.id.btnDelete);
         }
 
-//        public void bind(Trip trip, int position, OnTripClickListener listener) {
-//            textView.setText(trip.getLocation());
-//            date.setText("Date: " + trip.getDate());
-//            price.setText("Price: " + trip.getPrice() + " NIS");
-//
-//            if (trip.getImageUri() != null) {
-//                image.setImageURI(Uri.parse(trip.getImageUri()));
-//            } else {
-//                image.setImageResource(trip.getImageID());
-//            }
-//
-//            itemView.setOnClickListener(v -> listener.onTripClick(position));
-//            btnEdit.setOnClickListener(v -> listener.onEditClick(position));
-//            btnDelete.setOnClickListener(v -> listener.onDeleteClick(position));
-//        }
+
         public void bind(Trip trip, int position, OnTripClickListener listener) {
             textView.setText(trip.getLocation());
             date.setText("Date: " + trip.getDate());
@@ -72,7 +58,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 if (bitmap != null) {
                     image.setImageBitmap(bitmap);
                 } else {
-                    // الصورة ما نقرأت (مسار غلط؟) - استخدمي صورة افتراضية
                     if (trip.getImageID() != 0) {
                         image.setImageResource(trip.getImageID());
                     }

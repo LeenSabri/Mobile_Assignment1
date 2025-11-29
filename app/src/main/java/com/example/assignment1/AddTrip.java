@@ -103,9 +103,6 @@ public class AddTrip extends AppCompatActivity {
                 trip.setImageUri(storedImagePath);
             }
 
-//            if (selectedImageUri != null) {
-//                trip.setImageUri(selectedImageUri.toString());
-//            }
 
             ArrayList<Trip> trips = Shared_pref_trip.loadTrips(this);
             if (trips == null) trips = new ArrayList<>();
@@ -126,19 +123,16 @@ public class AddTrip extends AppCompatActivity {
 
             selectedImageUri = data.getData();
 
-            // 1) Show preview (optional but fine)
             imgTripPreview.setImageURI(selectedImageUri);
 
-            // 2) Copy the image into app internal storage
             String storedImagePath = saveImageToInternalStorage(selectedImageUri);
 
             if (storedImagePath != null) {
-                Toast.makeText(this, "Image saved to app storage ✅", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Image saved to app storage", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Failed to save image ❌", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Failed to save image", Toast.LENGTH_SHORT).show();
             }
 
-            // You can now pass `storedImagePath` later when saving the Trip object
         }
     }
 

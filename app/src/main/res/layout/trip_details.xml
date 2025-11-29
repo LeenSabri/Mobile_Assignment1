@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
-    <!-- ===== HEADER ===== -->
     <LinearLayout
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
@@ -38,7 +37,6 @@
 
     </LinearLayout>
 
-    <!-- ===== CONTENT ===== -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

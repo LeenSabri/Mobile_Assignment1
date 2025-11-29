@@ -50,7 +50,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- IMAGE -->
             <ImageView
                 android:id="@+id/tripImage"
                 android:layout_width="match_parent"
@@ -58,7 +57,6 @@
                 android:scaleType="centerCrop"
                 android:layout_marginBottom="16dp"/>
 
-            <!-- OVERVIEW -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -76,7 +74,6 @@
                 android:paddingTop="4dp"
                 android:lineSpacingExtra="4dp"/>
 
-            <!-- DETAILS TITLE -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -87,7 +84,6 @@
                 android:paddingTop="18dp"
                 android:paddingBottom="8dp"/>
 
-            <!-- DETAILS CARD -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -101,7 +97,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <!-- كل سطر فيه Divider تحته -->
                     <TextView
                         android:id="@+id/tvLocation"
                         android:layout_width="match_parent"
@@ -172,6 +167,36 @@
                     <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
 
                     <TextView
+                        android:id="@+id/tripType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Trip Type:"
+                        android:textColor="#222"
+                        android:textSize="16sp"
+                        android:paddingTop="6dp"/>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
+
+                    <TextView
+                        android:id="@+id/tripLunch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Include Lunch:"
+                        android:textColor="#222"
+                        android:textSize="16sp"
+                        android:paddingTop="6dp"/>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
+
+                    <TextView
+                        android:id="@+id/tvFamily"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Family Friendly:"
+                        android:textColor="#222"
+                        android:textSize="16sp"
+                        android:paddingTop="6dp"/>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
+
+                    <TextView
                         android:id="@+id/tvPrice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -185,14 +210,13 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- BUTTON -->
             <Button
                 android:id="@+id/btnBookNow"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:text="Book Now"
                 android:textAllCaps="false"
-                android:backgroundTint="#4A90E2"
+                android:backgroundTint="#592B96"
                 android:textColor="#FFF"
                 android:textSize="17sp"
                 android:layout_marginBottom="30dp"/>

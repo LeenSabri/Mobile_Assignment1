@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Assignment1</string>
+    <string name="location">Location</string>
+    <string name="starting_point">Starting Point</string>
+    <string name="coordinator">Coordinator</string>
+    <string name="date">Date</string>
+    <string name="allowed">Allowed</string>
+    <string name="price">Price</string>
+    <string name="image">Image</string>
 </resources>

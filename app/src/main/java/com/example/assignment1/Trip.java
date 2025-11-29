@@ -12,8 +12,15 @@ public class Trip {
     private double price;
     private String overview;
 
+    private String imageUri;
 
-    public Trip(String location, String starting_point, String coordinator, String date, int allowed_num, int registered_num, int remaining_num, double price) {
+    private String tripType;
+    private boolean includeLunch;
+    private boolean familyFriendly;
+
+    public Trip(String location, String starting_point, String coordinator,
+                String date, int allowed_num, int registered_num,
+                int remaining_num, double price) {
         this.location = location;
         this.starting_point = starting_point;
         this.coordinator = coordinator;
@@ -22,12 +29,16 @@ public class Trip {
         this.registered_num = registered_num;
         this.remaining_num = remaining_num;
         this.price = price;
+        this.tripType = "General";
+        this.includeLunch = false;
+        this.familyFriendly = false;
     }
 
     public Trip(String location, int imageID) {
         this.location = location;
         this.imageID = imageID;
     }
+
 
     public String getLocation() {
         return location;
@@ -107,5 +118,37 @@ public class Trip {
 
     public void setImageID(int imageID) {
         this.imageID = imageID;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
+    }
+
+    public String getTripType() {
+        return tripType;
+    }
+
+    public void setTripType(String tripType) {
+        this.tripType = tripType;
+    }
+
+    public boolean isIncludeLunch() {
+        return includeLunch;
+    }
+
+    public void setIncludeLunch(boolean includeLunch) {
+        this.includeLunch = includeLunch;
+    }
+
+    public boolean isFamilyFriendly() {
+        return familyFriendly;
+    }
+
+    public void setFamilyFriendly(boolean familyFriendly) {
+        this.familyFriendly = familyFriendly;
     }
 }

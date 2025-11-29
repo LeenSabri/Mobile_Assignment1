@@ -1,6 +1,8 @@
 package com.example.assignment1;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
@@ -61,9 +63,18 @@ public class TripDetailsActivity extends AppCompatActivity {
             tvFamily.setText("Family Friendly: " + (trip.isFamilyFriendly() ? "Yes" : "No"));
             tvPrice.setText("Price: " + trip.getPrice() + " NIS");
 
-            if (trip.getImageUri() != null) {
-                tripImage.setImageURI(Uri.parse(trip.getImageUri()));
-            } else {
+            String path = trip.getImageUri();
+
+            if (path != null && !path.trim().isEmpty()) {
+                Bitmap bitmap = BitmapFactory.decodeFile(path);
+                if (bitmap != null) {
+                    tripImage.setImageBitmap(bitmap);
+                } else {
+                    if (trip.getImageID() != 0) {
+                        tripImage.setImageResource(trip.getImageID());
+                    }
+                }
+            } else if (trip.getImageID() != 0) {
                 tripImage.setImageResource(trip.getImageID());
             }
         }

@@ -3,24 +3,28 @@ package com.example.assignment1;
 import java.util.ArrayList;
 
 public class DefaultTrips {
+
     public static ArrayList<Trip> seedTrips() {
         ArrayList<Trip> trips = new ArrayList<>();
 
-        // رحلة 1 — القدس
         Trip t1 = new Trip(
                 "Al-Quds",
                 "Ramallah",
                 "Abdullah Hammad",
                 "15/11/2025",
-                50,         // allowed_num
-                10,         // registered_num
-                40,         // remaining_num
-                120.0       // price
+                50,
+                10,
+                40,
+                120.0
         );
         t1.setImageID(R.drawable.al_quds);
         t1.setOverview("A cultural and historical trip to the city of Al-Quds, visiting Al-Aqsa Mosque and the Old City.");
 
-        // رحلة 2 — بتّير
+        t1.setTripType("Culture");
+        t1.setIncludeLunch(true);
+        t1.setFamilyFriendly(true);
+
+
         Trip t2 = new Trip(
                 "Bitteer",
                 "Bethlehem",
@@ -34,7 +38,11 @@ public class DefaultTrips {
         t2.setImageID(R.drawable.bitteer);
         t2.setOverview("A relaxing nature trip to the village of Battir, exploring its terraces and ancient irrigation system.");
 
-        // رحلة 3 — أم الصفّا
+        t2.setTripType("Nature");
+        t2.setIncludeLunch(false);
+        t2.setFamilyFriendly(true);
+
+
         Trip t3 = new Trip(
                 "Umm Al-Safa",
                 "Nablus",
@@ -48,7 +56,11 @@ public class DefaultTrips {
         t3.setImageID(R.drawable.umm_al_safa);
         t3.setOverview("A hiking journey in Umm Al-Safa reserve with beautiful landscapes and wildlife.");
 
-        // رحلة 4 — وادي قانا
+        t3.setTripType("Adventure");
+        t3.setIncludeLunch(false);
+        t3.setFamilyFriendly(false);
+
+
         Trip t4 = new Trip(
                 "Wadi Qana",
                 "Qalqilya",
@@ -61,6 +73,11 @@ public class DefaultTrips {
         );
         t4.setImageID(R.drawable.wadi_qana);
         t4.setOverview("An adventurous trail through Wadi Qana, known for its freshwater springs and natural beauty.");
+
+        t4.setTripType("Adventure");
+        t4.setIncludeLunch(true);
+        t4.setFamilyFriendly(false);
+
 
         trips.add(t1);
         trips.add(t2);

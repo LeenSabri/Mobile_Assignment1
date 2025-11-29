@@ -1,19 +1,21 @@
 package com.example.assignment1;
 
+import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.cardview.widget.CardView;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-    private ArrayList<Trip> trips;
+    private ArrayList<Trip> tripList;
     private OnTripClickListener listener;
 
     public interface OnTripClickListener {
@@ -22,68 +24,62 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         void onDeleteClick(int position);
     }
 
-    public RecyclerAdapter(ArrayList<Trip> trips, OnTripClickListener listener) {
-        this.trips = trips;
+    public RecyclerAdapter(ArrayList<Trip> tripList, OnTripClickListener listener) {
+        this.tripList = tripList;
         this.listener = listener;
     }
 
-    public void updateList(ArrayList<Trip> newTrips) {
-        this.trips = newTrips;
-        notifyDataSetChanged();
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView image, btnEdit, btnDelete;
+        TextView textView, date, price;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            image = itemView.findViewById(R.id.image);
+            textView = itemView.findViewById(R.id.textView);
+            date = itemView.findViewById(R.id.date);
+            price = itemView.findViewById(R.id.price);
+            btnEdit = itemView.findViewById(R.id.btnEdit);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
+        }
+
+        public void bind(Trip trip, int position, OnTripClickListener listener) {
+            textView.setText(trip.getLocation());
+            date.setText("Date: " + trip.getDate());
+            price.setText("Price: " + trip.getPrice() + " NIS");
+
+            if (trip.getImageUri() != null) {
+                image.setImageURI(Uri.parse(trip.getImageUri()));
+            } else {
+                image.setImageResource(trip.getImageID());
+            }
+
+            itemView.setOnClickListener(v -> listener.onTripClick(position));
+            btnEdit.setOnClickListener(v -> listener.onEditClick(position));
+            btnDelete.setOnClickListener(v -> listener.onDeleteClick(position));
+        }
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        CardView v = (CardView) LayoutInflater.from(parent.getContext())
+    public RecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_view, parent, false);
-        return new ViewHolder(v);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Trip trip = trips.get(position);
-        CardView cardView = holder.cardView;
-
-        ImageView imageView = cardView.findViewById(R.id.image);
-        imageView.setImageResource(trip.getImageID());
-
-        TextView txt = cardView.findViewById(R.id.textView);
-        txt.setText(trip.getLocation());
-
-        TextView tvDate = cardView.findViewById(R.id.date);
-        tvDate.setText("Date: " + trip.getDate());
-
-        TextView tvPrice = cardView.findViewById(R.id.price);
-        tvPrice.setText("Price: " + trip.getPrice() + "$");
-
-        ImageView btnEdit = cardView.findViewById(R.id.btnEdit);
-        ImageView btnDelete = cardView.findViewById(R.id.btnDelete);
-
-        cardView.setOnClickListener(v -> {
-            if (listener != null) listener.onTripClick(position);
-        });
-
-        btnEdit.setOnClickListener(v -> {
-            if (listener != null) listener.onEditClick(position);
-        });
-
-        btnDelete.setOnClickListener(v -> {
-            if (listener != null) listener.onDeleteClick(position);
-        });
-
+    public void onBindViewHolder(@NonNull RecyclerAdapter.ViewHolder holder, int position) {
+        holder.bind(tripList.get(position), position, listener);
     }
 
     @Override
     public int getItemCount() {
-        return trips.size();
+        return tripList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private CardView cardView;
-
-        public ViewHolder(CardView cardView) {
-            super(cardView);
-            this.cardView = cardView;
-        }
+    public void updateList(ArrayList<Trip> newList) {
+        this.tripList = newList;
+        notifyDataSetChanged();
     }
 }

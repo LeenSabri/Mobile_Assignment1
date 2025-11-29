@@ -76,7 +76,6 @@
                 android:elevation="4dp"
                 android:layout_gravity="center_vertical" />
 
-            <!-- أيقونة الحذف -->
             <ImageView
                 android:id="@+id/btnDelete"
                 android:layout_width="32dp"

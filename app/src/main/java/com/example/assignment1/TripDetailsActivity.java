@@ -1,11 +1,13 @@
 package com.example.assignment1;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,18 +15,17 @@ import java.util.ArrayList;
 
 public class TripDetailsActivity extends AppCompatActivity {
 
-    private ImageView tripImage;
-    private TextView tripTitle, tvOverview, tvLocation, tvStartingPoint, tvCoordinator,
-            tvDate, tvAllowed, tvRegistered, tvRemaining, tvPrice;
-    private ImageButton backButton;
-    private Button btnBookNow;
+    ImageView tripImage;
+    TextView tripTitle, tvOverview, tvLocation, tvStartingPoint, tvCoordinator,
+            tvDate, tvAllowed, tvRegistered, tvRemaining, tripType, tripLunch, tvFamily, tvPrice;
+
+    Button btnBookNow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.trip_details); // اسم ملف xml تبعك
+        setContentView(R.layout.trip_details);
 
-        // 1) أربطي الـ Views
         tripImage = findViewById(R.id.tripImage);
         tripTitle = findViewById(R.id.tripTitle);
         tvOverview = findViewById(R.id.tvOverview);
@@ -35,46 +36,68 @@ public class TripDetailsActivity extends AppCompatActivity {
         tvAllowed = findViewById(R.id.tvAllowed);
         tvRegistered = findViewById(R.id.tvRegistered);
         tvRemaining = findViewById(R.id.tvRemaining);
+        tripType = findViewById(R.id.tripType);
+        tripLunch = findViewById(R.id.tripLunch);
+        tvFamily = findViewById(R.id.tvFamily);
         tvPrice = findViewById(R.id.tvPrice);
-        backButton = findViewById(R.id.backButton);
         btnBookNow = findViewById(R.id.btnBookNow);
 
-        // 2) استقبلي الـ index
-        int index = getIntent().getIntExtra("index", -1);
+        int position = getIntent().getIntExtra("index", -1);
+        if (position != -1) {
+            ArrayList<Trip> trips = Shared_pref_trip.loadTrips(this);
+            Trip trip = trips.get(position);
 
-        if (index == -1) {
-            finish(); // لو صار اشي غلط
-            return;
+            tripTitle.setText(trip.getLocation());
+            tvOverview.setText(trip.getOverview());
+            tvLocation.setText("Location: " + trip.getLocation());
+            tvStartingPoint.setText("Starting Point: " + trip.getStarting_point());
+            tvCoordinator.setText("Coordinator: " + trip.getCoordinator());
+            tvDate.setText("Date: " + trip.getDate());
+            tvAllowed.setText("Allowed: " + trip.getAllowed_num());
+            tvRegistered.setText("Registered: " + trip.getRegistered_num());
+            tvRemaining.setText("Remaining: " + trip.getRemaining_num());
+            tripType.setText("Trip Type: " + trip.getTripType());
+            tripLunch.setText("Include Lunch: " + (trip.isIncludeLunch() ? "Yes" : "No"));
+            tvFamily.setText("Family Friendly: " + (trip.isFamilyFriendly() ? "Yes" : "No"));
+            tvPrice.setText("Price: " + trip.getPrice() + " NIS");
+
+            if (trip.getImageUri() != null) {
+                tripImage.setImageURI(Uri.parse(trip.getImageUri()));
+            } else {
+                tripImage.setImageResource(trip.getImageID());
+            }
         }
-
-        // 3) حمّلي الليست من SharedPreferences
-        ArrayList<Trip> trips = Shared_pref_trip.loadTrips(this);
-        Trip trip = trips.get(index);
-
-        // 4) اعرضي البيانات
-        tripImage.setImageResource(trip.getImageID());
-        tripTitle.setText(trip.getLocation());
-
-        // خليه يضيف تفاصيل إذا عنده (لو اضافتي overview لاحقاً بصير إلك مكان تحطيه)
-        tvOverview.setText(trip.getOverview() != null ? trip.getOverview() : "No overview available");
-
-        tvLocation.setText("Location: " + trip.getLocation());
-        tvStartingPoint.setText("Starting Point: " + trip.getStarting_point());
-        tvCoordinator.setText("Coordinator: " + trip.getCoordinator());
-        tvDate.setText("Date: " + trip.getDate());
-        tvAllowed.setText("Allowed: " + trip.getAllowed_num());
-        tvRegistered.setText("Registered: " + trip.getRegistered_num());
-        tvRemaining.setText("Remaining: " + trip.getRemaining_num());
-        tvPrice.setText("Price: " + trip.getPrice() + " NIS");
-
-        // 5) رجوع
+        ImageButton backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> finish());
 
-//        // 6) فتح شاشة الحجز
-//        btnBookNow.setOnClickListener(v -> {
-//            Intent i = new Intent(this, BookingActivity.class);
-//            i.putExtra("index", index);
-//            startActivity(i);
-//        });
+        btnBookNow.setOnClickListener(v -> {
+            ArrayList<Trip> trips = Shared_pref_trip.loadTrips(this);
+            int index = getIntent().getIntExtra("index", -1);
+
+            if (index != -1 && trips != null && index < trips.size()) {
+                Trip trip = trips.get(index);
+
+                int registered = trip.getRegistered_num();
+                int allowed = trip.getAllowed_num();
+
+                if (registered < allowed) {
+                    trip.setRegistered_num(registered + 1);
+                    trip.setRemaining_num(allowed - (registered + 1));
+
+                    trips.set(index, trip);
+                    Shared_pref_trip.saveTrips(this, trips);
+
+                    Toast.makeText(this, "You have successfully booked this trip!", Toast.LENGTH_SHORT).show();
+
+                    finish();
+
+                } else {
+                    Toast.makeText(this, "Sorry, this trip is already full!", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "Error processing booking!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }
